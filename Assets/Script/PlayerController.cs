@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using Photon.Realtime;
 /// <summary>
 /// プレイヤーの基本操作を処理するコンポーネント
 /// </summary>
@@ -77,5 +78,12 @@ public class PlayerController : MonoBehaviour
             PhotonNetwork.Instantiate("Bomb", posBomb, Quaternion.identity);//プレハブをインスタンス化する
             m_nowBomb -= 1;
         }  
+    }
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Explosion")
+        {
+            Debug.Log("爆発により死亡");
+        }
     }
 }
