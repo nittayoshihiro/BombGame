@@ -47,8 +47,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7cc1926997087547b87261cec87d1af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_explosionPrefabName: Explosion
   DetonationTime: 3
   m_bombEffect: {fileID: 0}
+  explosionRange: 3
+  levelMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!212 &3339269498178536800
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -115,6 +120,7 @@ MonoBehaviour:
   ObservedComponentsFoldoutOpen: 1
   Group: 0
   prefixField: -1
+  observableSearch: 0
   Synchronization: 3
   OwnershipTransfer: 0
   ObservedComponents:

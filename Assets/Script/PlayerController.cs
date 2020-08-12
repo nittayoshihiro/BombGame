@@ -9,6 +9,8 @@ using Photon.Realtime;
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerController : MonoBehaviour
 {
+    /// <summary>爆弾のプレハブ</summary>
+    [SerializeField] string m_bombPrefabName = "Prefab";
     /// <summary>爆弾管理変数</summary>
     [SerializeField] int m_nowBomb = 1;
     /// <summary>s最大爆弾保持数</summary>
@@ -75,7 +77,7 @@ public class PlayerController : MonoBehaviour
             Debug.Log("爆弾設置");
             // X 座標と Y 座標を四捨五入
             posBomb = new Vector2(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y));//爆弾の設置ポジション
-            PhotonNetwork.Instantiate("Bomb", posBomb, Quaternion.identity);//プレハブをインスタンス化する
+            PhotonNetwork.Instantiate(m_bombPrefabName, posBomb, Quaternion.identity);//プレハブをインスタンス化する
             m_nowBomb -= 1;
         }  
     }
@@ -84,6 +86,7 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.tag == "Explosion")
         {
             Debug.Log("爆発により死亡");
+            PhotonNetwork.Destroy(this.gameObject);
         }
     }
 }
