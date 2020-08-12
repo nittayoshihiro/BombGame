@@ -17,26 +17,29 @@ public class Bomb : MonoBehaviour
     public LayerMask levelMask;
     /// <summary>タイマー</summary>
     float m_Time;
-    float m_time;
+    PhotonView m_photonView;
     private Vector2 posExp;
     // Start is called before the first frame update
     void Start()
     {
-        
+        m_photonView = GetComponent<PhotonView>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        m_Time += Time.deltaTime;
-        if (m_Time > DetonationTime)//起爆時間を超えたら
+        if (m_photonView.IsMine)
         {
-            //爆風を広げる
-            StartCoroutine(Explosion(Vector2.up)); //上に広げる
-            StartCoroutine(Explosion(Vector2.down));　//下に広げる
-            StartCoroutine(Explosion(Vector2.right)); //右に広げる
-            StartCoroutine(Explosion(Vector2.left)); //左に広げる
-            PhotonNetwork.Destroy(this.gameObject);//このオブジェクトを破棄する
+            m_Time += Time.deltaTime;
+            if (m_Time > DetonationTime)//起爆時間を超えたら
+            {
+                //爆風を広げる
+                StartCoroutine(Explosion(Vector2.up)); //上に広げる
+                StartCoroutine(Explosion(Vector2.down)); //下に広げる
+                StartCoroutine(Explosion(Vector2.right)); //右に広げる
+                StartCoroutine(Explosion(Vector2.left)); //左に広げる
+                PhotonNetwork.Destroy(gameObject);//このオブジェクトを破棄する
+            }
         }
     }
 

@@ -83,10 +83,13 @@ public class PlayerController : MonoBehaviour
     }
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Explosion")
+        if (m_photonView.IsMine)
         {
-            Debug.Log("爆発により死亡");
-            PhotonNetwork.Destroy(this.gameObject);
+            if (collision.gameObject.tag == "Explosion")
+            {
+                Debug.Log("爆発により死亡");
+                PhotonNetwork.Destroy(gameObject);
+            }
         }
     }
 }

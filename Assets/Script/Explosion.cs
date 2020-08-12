@@ -5,24 +5,27 @@ using Photon.Pun;
 
 public class Explosion : MonoBehaviour
 {
-    //爆発範囲が消滅するまでの時間
+    /// <summary>爆発範囲が消滅するまでの時間</summary>
     [SerializeField] float finishExplosionTime = 1;
-    //時間
+    /// <summary>時間</summary>
     float m_Time;
-
+    PhotonView m_photonView;
     // Start is called before the first frame update
     void Start()
     {
-        
+        m_photonView = GetComponent<PhotonView>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        m_Time += Time.deltaTime;
-        if (m_Time > finishExplosionTime)
+        if (m_photonView.IsMine)
         {
-            PhotonNetwork.Destroy(this.gameObject);//このオブジェクトを破棄する
-        }
+            m_Time += Time.deltaTime;
+            if (m_Time > finishExplosionTime)
+            {
+                PhotonNetwork.Destroy(gameObject);//このオブジェクトを破棄する
+            }
+        } 
     }
 }
