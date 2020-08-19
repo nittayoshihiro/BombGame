@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
             //Playerを移動させる
             float h = Input.GetAxisRaw("Horizontal");   // 垂直方向の入力を取得する
             float v = Input.GetAxisRaw("Vertical");     // 水平方向の入力を取得する
-            dir = new Vector2(h, v).normalized; // 進行方向の単位ベクトルを作る (dir = direction)
+            dir = new Vector2(h, v).normalized;         // 進行方向の単位ベクトルを作る (dir = direction)
             m_rb2d.velocity = dir * m_moveSpeed;        // 単位ベクトルにスピードをかけて速度ベクトルにして、それを Rigidbody の速度ベクトルとしてセットする
              //爆弾リチャージ
             if (m_maxBomb > m_nowBomb)//爆弾が減ってるとき

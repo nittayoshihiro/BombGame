@@ -18,7 +18,6 @@ public class Bomb : MonoBehaviour
     /// <summary>タイマー</summary>
     float m_Time;
     PhotonView m_photonView;
-    private Vector2 posExp;
     // Start is called before the first frame update
     void Start()
     {
@@ -33,34 +32,29 @@ public class Bomb : MonoBehaviour
             m_Time += Time.deltaTime;
             if (m_Time > DetonationTime)//起爆時間を超えたら
             {
+                Debug.Log("起爆");
                 //爆風を広げる
-                StartCoroutine(Explosion(Vector2.up)); //上に広げる
-                StartCoroutine(Explosion(Vector2.down)); //下に広げる
-                StartCoroutine(Explosion(Vector2.right)); //右に広げる
-                StartCoroutine(Explosion(Vector2.left)); //左に広げる
-                PhotonNetwork.Destroy(gameObject);//このオブジェクトを破棄する
+                Explosion();
             }
         }
     }
-
     private IEnumerator Explosion(Vector2 direction)
     {
-        Debug.Log("起爆");
+        Debug.Log("コルーチ起爆");
         for (int i = 1; i < explosionRange; i++)
         {
             // ブロックとの当たり判定の結果を格納する変数
             RaycastHit2D hit;
-            // 爆風を広げた先に何か存在するか確認
+            // 爆風を広げる先に何か存在するか確認
             hit = Physics2D.Raycast(transform.position, direction, i, levelMask);
             // 爆風を広げた先に何も存在しない場合
             if (!hit.collider)
             {
-                Debug.Log("explosion");
-                // 爆風を広げるために、
-                // 爆発エフェクトのオブジェクトを作成
-                PhotonNetwork.Instantiate(m_explosionPrefabName, 
-                    new Vector2(transform.position.x,transform.position.y) + (direction *i)
-                    , Quaternion.identity);//爆発を生成する
+              // 爆風を広げるために、
+              // 爆発エフェクトのオブジェクトを作成
+              PhotonNetwork.Instantiate(m_explosionPrefabName, 
+              new Vector2(transform.position.x,transform.position.y) + (direction *i)
+              ,Quaternion.identity);//爆発を生成する
             }
             // 爆風を広げた先にブロックが存在する場合
             else
@@ -68,9 +62,30 @@ public class Bomb : MonoBehaviour
                 // 爆風はこれ以上広げない
                 break;
             }
-            
         }
         // 0.05 秒待ってから、次のマスに爆風を広げる
         yield return null;
+    }
+    void Explosion()
+    {
+        //爆風を広げる
+        StartCoroutine(Explosion(Vector2.up)); //上に広げる
+        StartCoroutine(Explosion(Vector2.down)); //下に広げる
+        StartCoroutine(Explosion(Vector2.right)); //右に広げる
+        StartCoroutine(Explosion(Vector2.left)); //左に広げる
+        PhotonNetwork.Destroy(gameObject);//このオブジェクトを破棄する
+    }
+    
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (m_photonView.IsMine)
+        {
+            //Explosionと接したときに、爆発時間に関係なく爆発する
+            if (collision.gameObject.tag == "Explosion")
+            {
+                Debug.Log("誘爆");
+                Explosion();
+            }
+        }
     }
 }
