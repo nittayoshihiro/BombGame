@@ -50,7 +50,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_explosionPrefabName: Explosion
-  DetonationTime: 10
+  DetonationTime: 3
   m_bombEffect: {fileID: 0}
   explosionRange: 2
   levelMask:
@@ -122,6 +122,7 @@ MonoBehaviour:
   ObservedComponentsFoldoutOpen: 1
   Group: 0
   prefixField: -1
+  observableSearch: 0
   Synchronization: 3
   OwnershipTransfer: 0
   ObservedComponents:
