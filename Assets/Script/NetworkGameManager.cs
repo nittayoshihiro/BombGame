@@ -5,7 +5,7 @@ using UnityEngine;
 using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
-
+using UnityEngine.PlayerLoop;
 public class NetworkGameManager : MonoBehaviourPunCallbacks // Photon Realtime 用のクラスを継承する
 {
     /// <summary>プレイヤーのプレハブ</summary>
@@ -16,7 +16,6 @@ public class NetworkGameManager : MonoBehaviourPunCallbacks // Photon Realtime �
     [SerializeField] Transform[] m_spawnPoints;
     /// <summary>自分が出現した場所を記憶しておく変数</summary>
     Transform m_mySpawnPoint;
-
     private void Awake()
     {
         // シーンの自動同期は無効にする
@@ -104,12 +103,15 @@ public class NetworkGameManager : MonoBehaviourPunCallbacks // Photon Realtime �
             m_mySpawnPoint = m_spawnPoints[actorNumber - 1];
         }
         GameObject player = PhotonNetwork.Instantiate(m_playerPrefabName, m_mySpawnPoint.position, m_mySpawnPoint.rotation);   // プレイヤーを生成し、他のクライアントと同期する
-
-        //　プレイヤー人数が満たされたらに部屋を閉じる
-        if (actorNumber > PhotonNetwork.CurrentRoom.MaxPlayers - 1)
+        if (actorNumber > 2)//プレイヤーが二人になったら
         {
-            Debug.Log("満たされました");
-            PhotonNetwork.CurrentRoom.IsOpen = false;
+            // プレイヤー人数が満たされたらに部屋を閉じる
+            if (actorNumber > PhotonNetwork.CurrentRoom.MaxPlayers - 1)
+            {
+                Debug.Log("満たされました");
+                PhotonNetwork.CurrentRoom.IsOpen = false;
+            }
+            
         }
         // 自分だけ入力を有効にする
         //player.GetComponent<NetworkPlayerController>().Initialize();
