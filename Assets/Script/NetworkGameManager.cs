@@ -105,6 +105,12 @@ public class NetworkGameManager : MonoBehaviourPunCallbacks // Photon Realtime �
         }
         GameObject player = PhotonNetwork.Instantiate(m_playerPrefabName, m_mySpawnPoint.position, m_mySpawnPoint.rotation);   // プレイヤーを生成し、他のクライアントと同期する
 
+        //　プレイヤー人数が満たされたらに部屋を閉じる
+        if (actorNumber > PhotonNetwork.CurrentRoom.MaxPlayers - 1)
+        {
+            Debug.Log("満たされました");
+            PhotonNetwork.CurrentRoom.IsOpen = false;
+        }
         // 自分だけ入力を有効にする
         //player.GetComponent<NetworkPlayerController>().Initialize();
     }
