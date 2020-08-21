@@ -75,7 +75,7 @@ public class Bomb : MonoBehaviour
                 break;
             }
         }
-        // 0.05 秒待ってから、次のマスに爆風を広げる
+        // 待ってから、次のマスに爆風を広げる
         yield return null;
     }
     

@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float BombCoolTime = 3;
     /// <summary>爆弾生成時間</summary>
     float BombTime;
+    /// <summary>爆弾を置けるか</summary>
+    bool m_bomb = true;
     /// <summary>ダウンエフェクト</summary>
     [SerializeField] GameObject m_downEffect;
     /// <summary>移動スピード</summary>
@@ -58,10 +60,13 @@ public class PlayerController : MonoBehaviour
                 }
             }
             //爆弾設置
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (m_bomb)//爆弾が置かれていないか
             {
-                Debug.Log("Spaceキーが押されました");
-                Bomb();
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    Debug.Log("Spaceキーが押されました");
+                    Bomb();
+                }
             }
         }
         
@@ -81,14 +86,31 @@ public class PlayerController : MonoBehaviour
             m_nowBomb -= 1;
         }  
     }
-    void OnTriggerEnter2D(Collider2D collision)
+    void OnTriggerEnter2D(Collider2D collision2D)
     {
-        if (m_photonView.IsMine)
+        if (m_photonView.enabled)
         {
-            if (collision.gameObject.tag == "Explosion")
+            if (collision2D.gameObject.tag == "Explosion")
             {
                 Debug.Log("爆発により死亡");
                 PhotonNetwork.Destroy(gameObject);
+            }
+            if (collision2D.gameObject.tag == "Bomb")
+            {
+                Debug.Log("そこにはおけません");
+                m_bomb = false;
+            }
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D collision2D)
+    {
+        if (m_photonView.enabled)
+        {
+            if (collision2D.gameObject.tag == "Bomb")
+            {
+                Debug.Log("そこにはおけません");
+                m_bomb = true;
             }
         }
     }
