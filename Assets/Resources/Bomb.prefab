@@ -50,7 +50,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_explosionPrefabName: Explosion
-  DetonationTime: 3
+  DetonationTime: 10
   m_bombEffect: {fileID: 0}
   explosionRange: 2
   levelMask:
@@ -208,4 +208,4 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 7

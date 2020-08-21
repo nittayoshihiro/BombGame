@@ -81,7 +81,9 @@ public class Bomb : MonoBehaviour
     
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (m_photonView.IsMine)
+        GameObject go = collision.gameObject;
+        PhotonView view = go.GetComponent<PhotonView>();
+        if (view.IsMine)
         {
             //Explosionと接したときに、爆発時間に関係なく爆発する
             if (collision.gameObject.tag == "Explosion")

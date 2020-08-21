@@ -28,6 +28,7 @@ public class PlayerController : MonoBehaviour
     AudioSource m_audio;
     Rigidbody2D m_rb2d;
     PhotonView m_photonView;
+    Collider2D m_collider2D;
     private Vector2 dir;
     private Vector2 posBomb;
     // Start is called before the first frame update
@@ -111,6 +112,8 @@ public class PlayerController : MonoBehaviour
             {
                 Debug.Log("そこにはおけません");
                 m_bomb = true;
+                m_collider2D = collision2D.gameObject.GetComponent<Collider2D>();
+                m_collider2D.isTrigger = false;
             }
         }
     }
