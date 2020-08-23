@@ -18,9 +18,12 @@ public class Bomb : MonoBehaviour
     /// <summary>タイマー</summary>
     float m_Time;
     PhotonView m_photonView;
+    /// <summary>爆破したか</summary>
+    private bool m_bombExp = true;
     // Start is called before the first frame update
     void Start()
     {
+        m_bombExp = true;
         m_photonView = GetComponent<PhotonView>();
     }
 
@@ -34,21 +37,27 @@ public class Bomb : MonoBehaviour
             {
                 Debug.Log("起爆");
                 //爆風を広げる
-                Explosion();
+                Explosion();            
             }
+
         }
     }
     void Explosion()
     {
-        PhotonNetwork.Instantiate(m_explosionPrefabName,
+        if (m_bombExp)
+        {
+            m_bombExp = false;
+            PhotonNetwork.Instantiate(m_explosionPrefabName,
               new Vector2(transform.position.x, transform.position.y)
               , Quaternion.identity);//爆発を生成する
-        //爆風を広げる
-        StartCoroutine(Explosion(Vector2.up)); //上に広げる
-        StartCoroutine(Explosion(Vector2.down)); //下に広げる
-        StartCoroutine(Explosion(Vector2.right)); //右に広げる
-        StartCoroutine(Explosion(Vector2.left)); //左に広げる
-        PhotonNetwork.Destroy(gameObject);//このオブジェクトを破棄する
+            //爆風を広げる
+            StartCoroutine(Explosion(Vector2.up)); //上に広げる
+            StartCoroutine(Explosion(Vector2.down)); //下に広げる
+            StartCoroutine(Explosion(Vector2.right)); //右に広げる
+            StartCoroutine(Explosion(Vector2.left)); //左に広げる
+            PhotonNetwork.Destroy(gameObject);//このオブジェクトを破棄する
+        }
+       
     }
     private IEnumerator Explosion(Vector2 direction)
     {
@@ -81,9 +90,7 @@ public class Bomb : MonoBehaviour
     
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        GameObject go = collision.gameObject;
-        PhotonView view = go.GetComponent<PhotonView>();
-        if (view.IsMine)
+        if(m_photonView.IsMine)
         {
             //Explosionと接したときに、爆発時間に関係なく爆発する
             if (collision.gameObject.tag == "Explosion")

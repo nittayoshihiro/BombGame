@@ -50,7 +50,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_explosionPrefabName: Explosion
-  DetonationTime: 10
+  DetonationTime: 5
   m_bombEffect: {fileID: 0}
   explosionRange: 2
   levelMask:

@@ -14,7 +14,7 @@ public class Explosion : MonoBehaviour
     void Start()
     {
         m_photonView = GetComponent<PhotonView>();
-        
+
     }
 
     // Update is called once per frame
