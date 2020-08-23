@@ -5,8 +5,6 @@ using Photon.Pun;
 
 public class Explosion : MonoBehaviour
 {
-    /// <summary>爆発エフェクトを入れる箱</summary>
-    [SerializeField] string explosionEffect = "Prefab";
     /// <summary>爆発範囲が消滅するまでの時間</summary>
     [SerializeField] float finishExplosionTime = 1;
     /// <summary>時間</summary>
@@ -16,7 +14,7 @@ public class Explosion : MonoBehaviour
     void Start()
     {
         m_photonView = GetComponent<PhotonView>();
-        
+
     }
 
     // Update is called once per frame
@@ -27,7 +25,6 @@ public class Explosion : MonoBehaviour
             m_Time += Time.deltaTime;
             if (m_Time > finishExplosionTime)
             {
-                PhotonNetwork.Instantiate(explosionEffect, this.transform.position, Quaternion.identity);
                 PhotonNetwork.Destroy(gameObject);//このオブジェクトを破棄する
             }
         } 
