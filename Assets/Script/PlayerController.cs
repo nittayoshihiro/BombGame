@@ -24,7 +24,9 @@ public class PlayerController : MonoBehaviour
     /// <summary>ダウンエフェクト</summary>
     [SerializeField] GameObject m_downEffect;
     /// <summary>移動スピード</summary>
-    [SerializeField] int m_moveSpeed = 1;
+    [SerializeField] float m_moveSpeed = 1;
+    /// <summary>移動スピードを上げる変数 </summary>
+    [SerializeField] float m_speedUp = 1.5f;
     AudioSource m_audio;
     Rigidbody2D m_rb2d;
     PhotonView m_photonView;
@@ -93,7 +95,7 @@ public class PlayerController : MonoBehaviour
         {
             if (collision2D.gameObject.tag == "Explosion")
             {
-                Debug.Log("爆発により死亡");
+                Debug.Log("爆発死");
                 PhotonNetwork.Destroy(gameObject);
             }
             if (collision2D.gameObject.tag == "Bomb")
@@ -101,6 +103,7 @@ public class PlayerController : MonoBehaviour
                 Debug.Log("そこにはおけません");
                 m_bomb = false;
             }
+            
         }
     }
 
@@ -116,5 +119,17 @@ public class PlayerController : MonoBehaviour
                 m_collider2D.isTrigger = false;
             }
         }
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (m_photonView.enabled)
+        {
+            if (collision.gameObject.tag == "Speed")
+            {
+                m_moveSpeed = m_moveSpeed * m_speedUp;
+                Debug.Log("現在のスピード" + m_moveSpeed);
+            }
+        }
+        
     }
 }
