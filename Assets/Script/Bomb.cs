@@ -87,7 +87,12 @@ public class Bomb : MonoBehaviour
         // 待ってから、次のマスに爆風を広げる
         yield return null;
     }
-    
+
+    private void OnEnable()
+    {
+        Start();
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(m_photonView.IsMine)
