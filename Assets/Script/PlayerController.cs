@@ -103,7 +103,6 @@ public class PlayerController : MonoBehaviour
                 Debug.Log("そこにはおけません");
                 m_bomb = false;
             }
-            
         }
     }
 
@@ -120,16 +119,12 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-    private void OnCollisionEnter2D(Collision2D collision)
+    void OnCollisionEnter2D(Collision2D collision)
     {
-        if (m_photonView.enabled)
+        if (collision.gameObject.tag == "Speed")
         {
-            if (collision.gameObject.tag == "Speed")
-            {
-                m_moveSpeed = m_moveSpeed * m_speedUp;
-                Debug.Log("現在のスピード" + m_moveSpeed);
-            }
+            m_moveSpeed = m_moveSpeed * m_speedUp;
+            Debug.Log("現在のスピード" + m_moveSpeed);
         }
-        
     }
 }
