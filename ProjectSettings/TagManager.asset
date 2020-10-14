@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Explosion
   - Bomb
+  - ExplosionUp
+  - MaxBombUp
+  - MoveSpeedUp
   layers:
   - Default
   - TransparentFX

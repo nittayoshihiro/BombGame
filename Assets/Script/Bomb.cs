@@ -50,15 +50,27 @@ public class Bomb : MonoBehaviour
             PhotonNetwork.Instantiate(m_explosionPrefabName,
               new Vector2(transform.position.x, transform.position.y)
               , Quaternion.identity);//爆発を生成する
-            //爆風を広げる
-            StartCoroutine(Explosion(Vector2.up)); //上に広げる
-            StartCoroutine(Explosion(Vector2.down)); //下に広げる
-            StartCoroutine(Explosion(Vector2.right)); //右に広げる
-            StartCoroutine(Explosion(Vector2.left)); //左に広げる
+            if ()//PlayerがexplosionUpを持っていないなら
+            {
+                //爆風を広げる
+                StartCoroutine(Explosion(Vector2.up)); //上に広げる
+                StartCoroutine(Explosion(Vector2.down)); //下に広げる
+                StartCoroutine(Explosion(Vector2.right)); //右に広げる
+                StartCoroutine(Explosion(Vector2.left)); //左に広げる
+            }
+            else //持っていたら
+            {
+                StartCoroutine(Explosion(new Vector2(0, 2)));//上に2マス広げる
+                StartCoroutine(Explosion(new Vector2(0, -2)));//下に2マス広げる
+                StartCoroutine(Explosion(new Vector2(2, 0)));//右に2マス広げる
+                StartCoroutine(Explosion(new Vector2(-2, 0)));//左に2マス広げる
+            }
+            
             PhotonNetwork.Destroy(gameObject);//このオブジェクトを破棄する
         }
        
     }
+
     private IEnumerator Explosion(Vector2 direction)
     {
         Debug.Log("コルーチ起爆");

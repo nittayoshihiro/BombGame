@@ -1,0 +1,33 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using Photon.Pun;
+using Photon.Realtime;
+
+public class ItemController : MonoBehaviour
+{
+    [SerializeField] private AudioClip getSE;
+    /// <summary>取得時の効果音</summary>
+    PhotonView m_photonView;
+    AudioSource audiosource;
+    
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        audiosource = GetComponent<AudioSource>(); //自身のAudioSource取得
+    }
+    
+    void OnTriggerEnter2D(Collider2D collision2D) //Collisionにぶつかったら
+    {
+        if (m_photonView.enabled)
+        {
+            if (collision2D.gameObject.tag == "Player") //そのCollisionがPlayerだったら
+            {
+                audiosource.PlayOneShot(getSE);
+                Debug.Log("Item取得");
+                Destroy(this);
+            }
+        }
+    }
+}

@@ -31,6 +31,7 @@ public class PlayerController : MonoBehaviour
     Collider2D m_collider2D;
     private Vector2 dir;
     private Vector2 posBomb;
+    private bool m_explosionUp = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -100,6 +101,10 @@ public class PlayerController : MonoBehaviour
             {
                 Debug.Log("そこにはおけません");
                 m_bomb = false;
+            }
+            if (collision2D.gameObject.tag == "ExplosionUp")
+            {
+                m_explosionUp = true;
             }
         }
     }
