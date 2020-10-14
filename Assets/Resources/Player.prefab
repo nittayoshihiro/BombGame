@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 2972819994617106006}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -106,7 +106,6 @@ MonoBehaviour:
   BombCoolTime: 3
   m_downEffect: {fileID: 0}
   m_moveSpeed: 2
-  m_speedUp: 1.5
 --- !u!50 &7952848068110329690
 Rigidbody2D:
   serializedVersion: 4
@@ -143,6 +142,7 @@ MonoBehaviour:
   ObservedComponentsFoldoutOpen: 1
   Group: 0
   prefixField: -1
+  observableSearch: 0
   Synchronization: 3
   OwnershipTransfer: 0
   ObservedComponents:
