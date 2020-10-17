@@ -19,6 +19,7 @@ public class ItemController : MonoBehaviour
     
     void OnTriggerEnter2D(Collider2D collision2D) //Collisionにぶつかったら
     {
+        Debug.Log("exぶつかった");
         if (m_photonView.IsMine)
         {
             if (collision2D.gameObject.tag == "Player") //そのCollisionがPlayerだったら
