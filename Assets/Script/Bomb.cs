@@ -37,7 +37,7 @@ public class Bomb : MonoBehaviour
             {
                 Debug.Log("起爆");
                 //爆風を広げる
-                Explosion();            
+                Explosion();
             }
 
         }
@@ -50,25 +50,19 @@ public class Bomb : MonoBehaviour
             PhotonNetwork.Instantiate(m_explosionPrefabName,
               new Vector2(transform.position.x, transform.position.y)
               , Quaternion.identity);//爆発を生成する
-            if ()//PlayerがexplosionUpを持っていないなら
-            {
-                //爆風を広げる
-                StartCoroutine(Explosion(Vector2.up)); //上に広げる
-                StartCoroutine(Explosion(Vector2.down)); //下に広げる
-                StartCoroutine(Explosion(Vector2.right)); //右に広げる
-                StartCoroutine(Explosion(Vector2.left)); //左に広げる
-            }
-            else //持っていたら
-            {
-                StartCoroutine(Explosion(new Vector2(0, 2)));//上に2マス広げる
-                StartCoroutine(Explosion(new Vector2(0, -2)));//下に2マス広げる
-                StartCoroutine(Explosion(new Vector2(2, 0)));//右に2マス広げる
-                StartCoroutine(Explosion(new Vector2(-2, 0)));//左に2マス広げる
-            }
-            
+            //爆風を広げる
+            StartCoroutine(Explosion(Vector2.up)); //上に広げる
+            StartCoroutine(Explosion(Vector2.down)); //下に広げる
+            StartCoroutine(Explosion(Vector2.right)); //右に広げる
+            StartCoroutine(Explosion(Vector2.left)); //左に広げる
+
             PhotonNetwork.Destroy(gameObject);//このオブジェクトを破棄する
         }
-       
+
+    }
+    public void GetExplosionUp()
+    {
+        explosionRange = 2;
     }
 
     private IEnumerator Explosion(Vector2 direction)
@@ -83,11 +77,11 @@ public class Bomb : MonoBehaviour
             // 爆風を広げた先に何も存在しない場合
             if (!hit.collider)
             {
-              // 爆風を広げるために、
-              // 爆発エフェクトのオブジェクトを作成
-              PhotonNetwork.Instantiate(m_explosionPrefabName, 
-              new Vector2(transform.position.x,transform.position.y) + (direction *i)
-              ,Quaternion.identity);//爆発を生成する
+                // 爆風を広げるために、
+                // 爆発エフェクトのオブジェクトを作成
+                PhotonNetwork.Instantiate(m_explosionPrefabName,
+                new Vector2(transform.position.x, transform.position.y) + (direction * i)
+                , Quaternion.identity);//爆発を生成する
             }
             // 爆風を広げた先にブロックが存在する場合
             else
@@ -99,10 +93,10 @@ public class Bomb : MonoBehaviour
         // 待ってから、次のマスに爆風を広げる
         yield return null;
     }
-    
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(m_photonView.IsMine)
+        if (m_photonView.IsMine)
         {
             //Explosionと接したときに、爆発時間に関係なく爆発する
             if (collision.gameObject.tag == "Explosion")

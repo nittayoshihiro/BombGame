@@ -10,17 +10,16 @@ public class ItemController : MonoBehaviour
     /// <summary>取得時の効果音</summary>
     PhotonView m_photonView;
     AudioSource audiosource;
-    
-
     // Start is called before the first frame update
     void Start()
     {
         audiosource = GetComponent<AudioSource>(); //自身のAudioSource取得
+        m_photonView = GetComponent<PhotonView>();
     }
     
     void OnTriggerEnter2D(Collider2D collision2D) //Collisionにぶつかったら
     {
-        if (m_photonView.enabled)
+        if (m_photonView.IsMine)
         {
             if (collision2D.gameObject.tag == "Player") //そのCollisionがPlayerだったら
             {

@@ -84,7 +84,12 @@ public class PlayerController : MonoBehaviour
             Debug.Log("爆弾設置");
             // X 座標と Y 座標を四捨五入
             posBomb = new Vector2(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y));//爆弾の設置ポジション
-            PhotonNetwork.Instantiate(m_bombPrefabName, posBomb, Quaternion.identity);//プレハブをインスタンス化する
+            GameObject bombClone = PhotonNetwork.Instantiate(m_bombPrefabName, posBomb, Quaternion.identity);//プレハブをインスタンス化して変数を取る
+            Bomb bomb = bombClone.GetComponent<Bomb>();//インスタンス化したBombスクリプトを取る
+            if (m_explosionUp)//プレイヤーがExplosionUpを取っていたら
+            {
+                bomb.GetExplosionUp();//爆発範囲を広げたボムにする
+            }
             m_nowBomb -= 1;
         }  
     }
