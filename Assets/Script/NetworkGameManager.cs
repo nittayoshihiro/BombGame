@@ -103,8 +103,10 @@ public class NetworkGameManager : MonoBehaviourPunCallbacks // Photon Realtime �
             m_mySpawnPoint = m_spawnPoints[actorNumber - 1];
         }
         GameObject player = PhotonNetwork.Instantiate(m_playerPrefabName, m_mySpawnPoint.position, m_mySpawnPoint.rotation);   // プレイヤーを生成し、他のクライアントと同期する
-        if (actorNumber > 2)//プレイヤーが二人になったら
+        player.GetComponent<PlayerController>().enabled = false;//プレイヤーコントローラーを無効にする
+        if (actorNumber >= 2)//プレイヤーが二人になったら
         {
+            player.GetComponent<PlayerController>().enabled = true;//プレイヤーコントローラーを有効にする
             // プレイヤー人数が満たされたらに部屋を閉じる
             if (actorNumber > PhotonNetwork.CurrentRoom.MaxPlayers - 1)
             {
