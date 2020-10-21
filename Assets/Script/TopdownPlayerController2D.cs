@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 [RequireComponent(typeof(SpriteRenderer), typeof(Rigidbody2D))]
 public class TopdownPlayerController2D : MonoBehaviour
@@ -13,37 +14,36 @@ public class TopdownPlayerController2D : MonoBehaviour
     Animator m_anim;
     Rigidbody2D m_rb;
     bool m_isWalking = false;
+    PhotonView m_view;
 
     void Start()
     {
         m_sprite = GetComponent<SpriteRenderer>();
         m_rb = GetComponent<Rigidbody2D>();
         m_anim = GetComponent<Animator>();
+        m_view = GetComponent<PhotonView>();
     }
 
     void Update()
     {
-        float h = Input.GetAxisRaw("Horizontal");
-        float v = Input.GetAxisRaw("Vertical");
+        if (!m_view || (m_view && m_view.IsMine))
+        { 
+            float h = Input.GetAxisRaw("Horizontal");
+            float v = Input.GetAxisRaw("Vertical");
 
-        Vector2 dir = AdjustInputDirection(h, v);   // 入力方向を４方向に変換（制限）する
-        // オブジェクトを動かす
-        //transform.Translate(m_walkSpeed * dir * Time.deltaTime);    // このやり方でもできるが、コライダーにめり込む
-        m_rb.velocity = dir * m_walkSpeed;
+            Vector2 dir = AdjustInputDirection(h, v);   // 入力方向を４方向に変換（制限）する
 
-        // 入力方向によって左右の向きを変える
-        if (dir.x != 0)
-        {
-            m_sprite.flipX = (dir.x > 0);
+            // オブジェクトを動かす
+            m_rb.velocity = dir * m_walkSpeed;
+
+            m_isWalking = dir == Vector2.zero ? false : true;
+
+            m_anim.SetFloat("InputX", dir.x);
+            m_anim.SetFloat("InputY", dir.y);
+            m_anim.SetBool("IsWalking", m_isWalking);
+
+            m_lastMovedDirection = dir;
         }
-
-        m_isWalking = dir == Vector2.zero ? false : true;
-
-        m_anim.SetFloat("InputX", dir.x);
-        m_anim.SetFloat("InputY", dir.y);
-        m_anim.SetBool("IsWalking", m_isWalking);
-
-        m_lastMovedDirection = dir;
     }
 
     /// <summary>
