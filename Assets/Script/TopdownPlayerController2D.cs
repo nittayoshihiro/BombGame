@@ -12,7 +12,7 @@ public class TopdownPlayerController2D : MonoBehaviour
     SpriteRenderer m_sprite;
     Animator m_anim;
     Rigidbody2D m_rb;
-    bool m_isWalking;
+    bool m_isWalking = false;
 
     void Start()
     {
@@ -37,26 +37,13 @@ public class TopdownPlayerController2D : MonoBehaviour
             m_sprite.flipX = (dir.x > 0);
         }
 
-        //Animate(dir.x, dir.y);
-        if (dir == Vector2.zero)
-        {
-            m_isWalking = false;
-        }
-        else
-        {
-            m_isWalking = true;
-        }
-        
+        m_isWalking = dir == Vector2.zero ? false : true;
+
+        m_anim.SetFloat("InputX", dir.x);
+        m_anim.SetFloat("InputY", dir.y);
         m_anim.SetBool("IsWalking", m_isWalking);
 
-        m_anim.SetFloat("InputX", Mathf.Abs(dir.x));
-        m_anim.SetFloat("InputY", dir.y);
         m_lastMovedDirection = dir;
-    }
-
-    private void LateUpdate()
-    {
-        
     }
 
     /// <summary>
@@ -86,43 +73,5 @@ public class TopdownPlayerController2D : MonoBehaviour
         }
 
         return dir;
-    }
-
-    /// <summary>
-    /// 入力と直前に移動した方向に応じてアニメーションを制御する
-    /// </summary>
-    /// <param name="inputX"></param>
-    /// <param name="inputY"></param>
-    void Animate(float inputX, float inputY)
-    {
-        if (m_anim == null) return; // Animator Controller がない場合は何もしない
-
-        if (inputX != 0)
-        {
-            m_anim.Play("WalkLeft");
-        }
-        else if (inputY > 0)
-        {
-            m_anim.Play("WalkUp");
-        }
-        else if (inputY < 0)
-        {
-            m_anim.Play("WalkDown");
-        }
-        else
-        {
-            if (m_lastMovedDirection.x != 0)
-            {
-                m_anim.Play("IdolLeft");
-            }
-            else if (m_lastMovedDirection.y > 0)
-            {
-                m_anim.Play("IdolUp");
-            }
-            else if (m_lastMovedDirection.y < 0)
-            {
-                m_anim.Play("IdolDown");
-            }
-        }
     }
 }
