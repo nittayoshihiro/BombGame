@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 [RequireComponent(typeof(SpriteRenderer), typeof(Rigidbody2D))]
 public class TopdownPlayerController2D : MonoBehaviour
@@ -12,51 +13,37 @@ public class TopdownPlayerController2D : MonoBehaviour
     SpriteRenderer m_sprite;
     Animator m_anim;
     Rigidbody2D m_rb;
-    bool m_isWalking;
+    bool m_isWalking = false;
+    PhotonView m_view;
 
     void Start()
     {
         m_sprite = GetComponent<SpriteRenderer>();
         m_rb = GetComponent<Rigidbody2D>();
         m_anim = GetComponent<Animator>();
+        m_view = GetComponent<PhotonView>();
     }
 
     void Update()
     {
-        float h = Input.GetAxisRaw("Horizontal");
-        float v = Input.GetAxisRaw("Vertical");
+        if (!m_view || (m_view && m_view.IsMine))
+        { 
+            float h = Input.GetAxisRaw("Horizontal");
+            float v = Input.GetAxisRaw("Vertical");
 
-        Vector2 dir = AdjustInputDirection(h, v);   // 入力方向を４方向に変換（制限）する
-        // オブジェクトを動かす
-        //transform.Translate(m_walkSpeed * dir * Time.deltaTime);    // このやり方でもできるが、コライダーにめり込む
-        m_rb.velocity = dir * m_walkSpeed;
+            Vector2 dir = AdjustInputDirection(h, v);   // 入力方向を４方向に変換（制限）する
 
-        // 入力方向によって左右の向きを変える
-        if (dir.x != 0)
-        {
-            m_sprite.flipX = (dir.x > 0);
+            // オブジェクトを動かす
+            m_rb.velocity = dir * m_walkSpeed;
+
+            m_isWalking = dir == Vector2.zero ? false : true;
+
+            m_anim.SetFloat("InputX", dir.x);
+            m_anim.SetFloat("InputY", dir.y);
+            m_anim.SetBool("IsWalking", m_isWalking);
+
+            m_lastMovedDirection = dir;
         }
-
-        //Animate(dir.x, dir.y);
-        if (dir == Vector2.zero)
-        {
-            m_isWalking = false;
-        }
-        else
-        {
-            m_isWalking = true;
-        }
-        
-        m_anim.SetBool("IsWalking", m_isWalking);
-
-        m_anim.SetFloat("InputX", Mathf.Abs(dir.x));
-        m_anim.SetFloat("InputY", dir.y);
-        m_lastMovedDirection = dir;
-    }
-
-    private void LateUpdate()
-    {
-        
     }
 
     /// <summary>
@@ -86,43 +73,5 @@ public class TopdownPlayerController2D : MonoBehaviour
         }
 
         return dir;
-    }
-
-    /// <summary>
-    /// 入力と直前に移動した方向に応じてアニメーションを制御する
-    /// </summary>
-    /// <param name="inputX"></param>
-    /// <param name="inputY"></param>
-    void Animate(float inputX, float inputY)
-    {
-        if (m_anim == null) return; // Animator Controller がない場合は何もしない
-
-        if (inputX != 0)
-        {
-            m_anim.Play("WalkLeft");
-        }
-        else if (inputY > 0)
-        {
-            m_anim.Play("WalkUp");
-        }
-        else if (inputY < 0)
-        {
-            m_anim.Play("WalkDown");
-        }
-        else
-        {
-            if (m_lastMovedDirection.x != 0)
-            {
-                m_anim.Play("IdolLeft");
-            }
-            else if (m_lastMovedDirection.y > 0)
-            {
-                m_anim.Play("IdolUp");
-            }
-            else if (m_lastMovedDirection.y < 0)
-            {
-                m_anim.Play("IdolDown");
-            }
-        }
     }
 }
