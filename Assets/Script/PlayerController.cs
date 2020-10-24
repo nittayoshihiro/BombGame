@@ -27,6 +27,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float m_moveSpeed = 1;
     /// <summary>移動スピードを上げる変数 </summary>
     [SerializeField] float m_speedUp = 1.5f;
+    /// <summary>直前に移動した方向</summary>
+    Vector2 m_lastMovedDirection;
+    bool m_isWalking = false;
+    SpriteRenderer m_sprite;
+    Animator m_anim;
     AudioSource m_audio;
     Rigidbody2D m_rb2d;
     PhotonView m_photonView;
@@ -36,7 +41,9 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        m_sprite = GetComponent<SpriteRenderer>();
         m_photonView = GetComponent<PhotonView>();
+        m_anim = GetComponent<Animator>();
         m_rb2d = GetComponent<Rigidbody2D>();
         m_audio = GetComponent<AudioSource>();
         m_nowBomb = m_maxBomb;//爆弾保持を最大にしておく
@@ -50,9 +57,20 @@ public class PlayerController : MonoBehaviour
             //Playerを移動させる
             float h = Input.GetAxisRaw("Horizontal");   // 垂直方向の入力を取得する
             float v = Input.GetAxisRaw("Vertical");     // 水平方向の入力を取得する
-            dir = new Vector2(h, v).normalized;         // 進行方向の単位ベクトルを作る (dir = direction)
-            m_rb2d.velocity = dir * m_moveSpeed;        // 単位ベクトルにスピードをかけて速度ベクトルにして、それを Rigidbody の速度ベクトルとしてセットする
-             //爆弾リチャージ
+
+            Vector2 dir = AdjustInputDirection(h, v);   // 入力方向を４方向に変換（制限）する
+
+            // オブジェクトを動かす
+            m_rb2d.velocity = dir * m_moveSpeed;
+
+            m_isWalking = dir == Vector2.zero ? false : true;
+
+            m_anim.SetFloat("InputX", dir.x);
+            m_anim.SetFloat("InputY", dir.y);
+            m_anim.SetBool("IsWalking", m_isWalking);
+
+            m_lastMovedDirection = dir;
+            //爆弾リチャージ
             if (m_maxBomb > m_nowBomb)//爆弾が減ってるとき
             {
                 BombTime += Time.deltaTime;
@@ -73,6 +91,34 @@ public class PlayerController : MonoBehaviour
             }
         }
         
+    }
+    /// <summary>
+    /// 入力された方向を４方向に制限し、Vector2 にして返す
+    /// （斜めに入力された場合でも、それ以前の入力状況に応じて４方向に制限する）
+    /// </summary>
+    /// <param name="inputX"></param>
+    /// <param name="inputY"></param>
+    Vector2 AdjustInputDirection(float inputX, float inputY)
+    {
+        Vector2 dir = new Vector2(inputX, inputY);
+
+        if (m_lastMovedDirection == Vector2.zero)
+        {
+            if (dir.x != 0 && dir.y != 0)
+            {
+                dir.y = 0;
+            }
+        }
+        else if (m_lastMovedDirection.x != 0)
+        {
+            dir.y = 0;
+        }
+        else if (m_lastMovedDirection.y != 0)
+        {
+            dir.x = 0f;
+        }
+
+        return dir;
     }
     /// <summary>
     /// 爆弾を設置する
@@ -105,7 +151,6 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-
     void OnTriggerExit2D(Collider2D collision2D)
     {
         if (m_photonView.enabled)
