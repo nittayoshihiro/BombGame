@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 // Photon 用の名前空間を参照する
 using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
-using UnityEngine.PlayerLoop;
-public class NetworkGameManager : MonoBehaviourPunCallbacks // Photon Realtime 用のクラスを継承する
+
+public class NetworkGameManagerForTest : MonoBehaviourPunCallbacks // Photon Realtime 用のクラスを継承する
 {
     /// <summary>プレイヤーのプレハブ</summary>
     [SerializeField] string m_playerPrefabName = "Prefab";
@@ -16,6 +17,7 @@ public class NetworkGameManager : MonoBehaviourPunCallbacks // Photon Realtime �
     [SerializeField] Transform[] m_spawnPoints;
     /// <summary>自分が出現した場所を記憶しておく変数</summary>
     Transform m_mySpawnPoint;
+
     private void Awake()
     {
         // シーンの自動同期は無効にする
@@ -100,23 +102,10 @@ public class NetworkGameManager : MonoBehaviourPunCallbacks // Photon Realtime �
         // spawnPoints に順番に spawn させる
         if (actorNumber < m_spawnPoints.Length + 1)
         {
-            m_mySpawnPoint = m_spawnPoints[actorNumber - 1];
+            int i = (actorNumber - 1) % m_spawnPoints.Length;
+            m_mySpawnPoint = m_spawnPoints[i];
         }
         GameObject player = PhotonNetwork.Instantiate(m_playerPrefabName, m_mySpawnPoint.position, m_mySpawnPoint.rotation);   // プレイヤーを生成し、他のクライアントと同期する
-        player.GetComponent<PlayerController>().enabled = false;//プレイヤーコントローラーを無効にする
-        if (actorNumber >= 2)//プレイヤーが二人になったら
-        {
-            player.GetComponent<PlayerController>().enabled = true;//プレイヤーコントローラーを有効にする
-            // プレイヤー人数が満たされたらに部屋を閉じる
-            if (actorNumber > PhotonNetwork.CurrentRoom.MaxPlayers - 1)
-            {
-                Debug.Log("満たされました");
-                PhotonNetwork.CurrentRoom.IsOpen = false;
-            }
-            
-        }
-        // 自分だけ入力を有効にする
-        //player.GetComponent<NetworkPlayerController>().Initialize();
     }
 
     #region MonoBehaviourPunCallbacks のコールバック関数

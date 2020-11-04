@@ -6,9 +6,7 @@ TagManager:
   tags:
   - Explosion
   - Bomb
-  - ExplosionUp
-  - MaxBombUp
-  - MoveSpeedUp
+  - Speed
   layers:
   - Default
   - TransparentFX
@@ -43,6 +41,24 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Map
+    uniqueID: 1946358703
+    locked: 0
+  - name: Bom
+    uniqueID: 3222011715
+    locked: 0
+  - name: Player
+    uniqueID: 1461175767
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Player
+    uniqueID: 3293010933
+    locked: 0
+  - name: Bomb
+    uniqueID: 626968125
+    locked: 0
+  - name: Map
+    uniqueID: 2572284175
     locked: 0
