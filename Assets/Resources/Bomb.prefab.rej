@@ -1,0 +1,9 @@
+diff a/Assets/Resources/Bomb.prefab b/Assets/Resources/Bomb.prefab	(rejected hunks)
+@@ -122,7 +122,6 @@
+   ObservedComponentsFoldoutOpen: 1
+   Group: 0
+   prefixField: -1
+-  observableSearch: 0
+   Synchronization: 3
+   OwnershipTransfer: 0
+   ObservedComponents:

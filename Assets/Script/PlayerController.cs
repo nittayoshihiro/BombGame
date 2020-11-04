@@ -136,7 +136,7 @@ public class PlayerController : MonoBehaviour
             Bomb bomb = bombClone.GetComponent<Bomb>();//インスタンス化したBombスクリプトを取る
             if (m_explosionUp)//プレイヤーがExplosionUpを取っていたら
             {
-                bomb.GetExplosionUp();//爆発範囲を広げたボムにする
+                //bomb.GetExplosionUp();//爆発範囲を広げたボムにする
             }
             m_nowBomb -= 1;
         }  
