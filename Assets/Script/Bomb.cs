@@ -21,7 +21,7 @@ public class Bomb : MonoBehaviour
     /// <summary>爆破したか</summary>
     private bool m_bombExp = true;
     // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
         m_bombExp = true;
         m_photonView = GetComponent<PhotonView>();
